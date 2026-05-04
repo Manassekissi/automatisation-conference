@@ -1,0 +1,167 @@
+{
+  "name": "My workflow 10",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Inscription à l'événement",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "prenom"
+            },
+            {
+              "fieldLabel": "email",
+              "fieldType": "email"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -320,
+        -48
+      ],
+      "id": "87cc4434-a199-4293-9c18-6193656aa337",
+      "name": "On form submission",
+      "webhookId": "f1c07990-01d7-4817-b6ec-b0473ae6d9da"
+    },
+    {
+      "parameters": {
+        "fromEmail": "kissiyerimanasse@gmail.com",
+        "toEmail": "={{ $json.email }}",
+        "subject": "Confirmation de votre inscription",
+        "html": "=Bonjour {{ $json.prenom }},\n\nVotre inscription a bien été reçue.\nNous vous contacterons très bientôt avec tous les détails.\n\nÀ bientôt !",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        -80,
+        -48
+      ],
+      "id": "8720486b-1858-4320-a4f7-1f2461735005",
+      "name": "Send an Email",
+      "webhookId": "5be7d220-cf36-4146-a431-e5cbdd0f09b4",
+      "credentials": {
+        "smtp": {
+          "id": "OVRb0v5oPkwxSnlI",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Fk6h60VUB7nmiCuov0oJjrBRUgMLbI0M2Cg4AJ32COA",
+          "mode": "list",
+          "cachedResultName": "Inscriptions Conférence",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Fk6h60VUB7nmiCuov0oJjrBRUgMLbI0M2Cg4AJ32COA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Fk6h60VUB7nmiCuov0oJjrBRUgMLbI0M2Cg4AJ32COA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "prénom": "={{ $('On form submission').item.json.prenom }}",
+            "Email": "={{ $('On form submission').item.json.email }}",
+            "Date d'inscription": "={{ $('On form submission').item.json.submittedAt }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "prénom",
+              "displayName": "prénom",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date d'inscription",
+              "displayName": "Date d'inscription",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        128,
+        -48
+      ],
+      "id": "8c277fa0-29e7-4085-a745-923ae50f44e9",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "oitvjgIr7cM0Pavk",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an Email": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3350ccd5-7066-477d-8bfe-112102820dfb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c3e78269f4f8655dd523797817c3daee3b51f783131ac3b973aab977e6b386c4"
+  },
+  "id": "0MxT9Kl1X00T5n7u",
+  "tags": []
+}
